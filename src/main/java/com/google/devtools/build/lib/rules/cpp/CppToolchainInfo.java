@@ -361,10 +361,14 @@ public final class CppToolchainInfo {
     if (!featureNames.contains(CppRuleClasses.NO_LEGACY_FEATURES)) {
       try {
         String gccToolPath = "DUMMY_GCC_TOOL";
+        String ccToolPath = "DUMMY_CC_TOOL";
         String linkerToolPath = "DUMMY_LINKER_TOOL";
         String arToolPath = "DUMMY_AR_TOOL";
         String stripToolPath = "DUMMY_STRIP_TOOL";
         for (ToolPath tool : toolchain.getToolPathList()) {
+          if (tool.getName().equals(Tool.CC.getNamePart())) {
+            ccToolPath = tool.getPath();
+          }
           if (tool.getName().equals(Tool.GCC.getNamePart())) {
             gccToolPath = tool.getPath();
             linkerToolPath =
@@ -378,6 +382,11 @@ public final class CppToolchainInfo {
           if (tool.getName().equals(Tool.STRIP.getNamePart())) {
             stripToolPath = tool.getPath();
           }
+        }
+
+        // if we don't have a defined C compiler, use gcc instead
+        if (ccToolPath.equals("DUMMY_CC_TOOL")) {
+          ccToolPath = gccToolPath;
         }
 
         // TODO(b/30109612): Remove fragile legacyCompileFlags shuffle once there are no legacy
@@ -403,6 +412,7 @@ public final class CppToolchainInfo {
                 featureNames,
                 gccToolPath,
                 linkerToolPath,
+                ccToolPath,
                 arToolPath,
                 stripToolPath,
                 toolchain.getSupportsEmbeddedRuntimes(),
@@ -820,8 +830,9 @@ public final class CppToolchainInfo {
                   // TODO(tmsriram): Fix this to check if this is a llvm crosstool
                   // and return true.  This needs changes to crosstool_config.proto.
                   return false;
-                } else if (tool == Tool.GCOVTOOL || tool == Tool.OBJCOPY) {
+                } else if (tool == Tool.GCOVTOOL || tool == Tool.OBJCOPY || tool == Tool.CC) {
                   // gcov-tool and objcopy are optional, don't check whether they're present
+                  // cc is optional for backwards compatibility
                   return false;
                 } else {
                   return true;

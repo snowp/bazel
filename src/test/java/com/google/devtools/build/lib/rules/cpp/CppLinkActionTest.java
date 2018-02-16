@@ -97,6 +97,7 @@ public class CppLinkActionTest extends BuildViewTestCase {
                 ImmutableSet.of(),
                 "gcc_tool",
                 "dynamic_library_linker_tool",
+                "cc_tool",
                 "ar_tool",
                 "strip_tool",
                 /* supportsEmbeddedRuntimes= */ true,

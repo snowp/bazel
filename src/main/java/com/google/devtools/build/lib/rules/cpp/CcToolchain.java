@@ -640,6 +640,7 @@ public class CcToolchain implements RuleConfiguredTargetFactory {
     return ImmutableMap.<String, Object>builder()
         .put("objcopy_executable", getSkylarkValueForTool(Tool.OBJCOPY, cppToolchainInfo))
         .put("compiler_executable", getSkylarkValueForTool(Tool.GCC, cppToolchainInfo))
+        .put("c_compiler_executable", getSkylarkValueForTool(Tool.CC, cppToolchainInfo))
         .put("preprocessor_executable", getSkylarkValueForTool(Tool.CPP, cppToolchainInfo))
         .put("nm_executable", getSkylarkValueForTool(Tool.NM, cppToolchainInfo))
         .put("objdump_executable", getSkylarkValueForTool(Tool.OBJDUMP, cppToolchainInfo))

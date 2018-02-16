@@ -87,6 +87,7 @@ public final class CppConfiguration extends BuildConfiguration.Fragment {
     AR("ar"),
     CPP("cpp"),
     GCC("gcc"),
+    CC("cc"),
     GCOV("gcov"),
     GCOVTOOL("gcov-tool"),
     LD("ld"),
@@ -1085,6 +1086,16 @@ public final class CppConfiguration extends BuildConfiguration.Fragment {
   public String getCppExecutableForSkylark() {
     PathFragment cppExecutable = getToolPathFragment(Tool.GCC);
     return cppExecutable != null ? cppExecutable.getPathString() : "";
+  }
+
+  @SkylarkCallable(
+    name = "c_compiler_executable",
+    structField = true,
+    doc = "Path to C compiler binary."
+  )
+  public String getCExecutableForSkylark() {
+    PathFragment cExecutable = getToolPathFragment(Tool.CC);
+    return cExecutable != null ? cExecutable.getPathString() : getCppExecutableForSkylark();
   }
 
   @SkylarkCallable(
